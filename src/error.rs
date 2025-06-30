@@ -29,9 +29,9 @@ impl fmt::Display for Error {
             Self::CoilValue(v) => write!(f, "Invalid coil value: {v}"),
             Self::BufferSize => write!(f, "Invalid buffer size"),
             Self::FnCode(fn_code) => write!(f, "Invalid function code: 0x{fn_code:0>2X}"),
-            Self::ExceptionCode(code) => write!(f, "Invalid exception code:0x {code:0>2X}"),
+            Self::ExceptionCode(code) => write!(f, "Invalid exception code: 0x{code:0>2X}"),
             Self::ExceptionFnCode(code) => {
-                write!(f, "Invalid exception function code:0x {code:0>2X}")
+                write!(f, "Invalid exception function code: 0x{code:0>2X}")
             }
             Self::Crc(expected, actual) => write!(
                 f,
@@ -43,7 +43,7 @@ impl fmt::Display for Error {
                 "Length Mismatch: Length Field: {length_field}, PDU Len + 1: {pdu_len}"
             ),
             Self::ProtocolNotModbus(protocol_id) => {
-                write!(f, "Protocol not Modbus(0), recieved {protocol_id} instead")
+                write!(f, "Protocol not Modbus(0), received {protocol_id} instead")
             }
         }
     }
@@ -70,7 +70,7 @@ impl defmt::Format for Error {
                 length_field, pdu_len
             ),
             Self::ProtocolNotModbus(protocol_id) => {
-                defmt::write!(f, "Protocol not Modbus(0), recieved {} instead", protocol_id)
+                defmt::write!(f, "Protocol not Modbus(0), received {} instead", protocol_id)
             }
         }
     }
