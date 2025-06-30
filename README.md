@@ -36,6 +36,23 @@ modbus-core = { version = "*", default-features = false, features = ["rtu"] }
 - [MODBUS over serial line specification and implementation guide v1.02 (PDF)](http://modbus.org/docs/Modbus_over_serial_line_V1_02.pdf)
 - [MODBUS Messaging on TCP/IP Implementation Guide v1.0b (PDF)](http://modbus.org/docs/Modbus_Messaging_Implementation_Guide_V1_0b.pdf)
 
+
+## Logging / defmt
+
+This crate has the option to do logging through the [log crate](https://docs.rs/log/latest/log/), 
+or using [defmt](https://defmt.ferrous-systems.com/) for embedded environments.
+
+The default behavior is to include and use log, but you can use defmt instead, using the following:
+
+```toml
+[dependencies]
+modbus-core = { version = "*", default-features = false, features = ["rtu", "defmt"] }
+```
+
+Defmt will only be included when running on a system with no OS, even when explicitly included.
+Including both defmt and log will default to defmt if there is no OS, as defmt must be explicitly included.
+Disabling the default feature (log), and not using the defmt feature will not compile.
+
 ## License
 
 Copyright 2018-2025 [slowtec GmbH](https://www.slowtec.de)
