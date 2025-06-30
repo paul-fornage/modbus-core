@@ -1,5 +1,6 @@
 //! Modbus TCP server (slave) specific functions.
 use super::*;
+use crate::error;
 
 /// Decode an TCP request.
 pub fn decode_request(buf: &[u8]) -> Result<Option<RequestAdu>> {
@@ -27,7 +28,7 @@ pub fn decode_request(buf: &[u8]) -> Result<Option<RequestAdu>> {
         .map(|pdu| Some(RequestAdu { hdr, pdu }))
         .inspect_err(|&err| {
             // Unrecoverable error
-            log::error!("Failed to decode request PDU: {err}");
+            error!("Failed to decode request PDU: {}", err);
         })
 }
 
@@ -61,7 +62,7 @@ pub fn decode_response(buf: &[u8]) -> Result<Option<ResponseAdu>> {
                 .map(|pdu| Some(ResponseAdu { hdr, pdu }))
                 .inspect_err(|&err| {
                     // Unrecoverable error
-                    log::error!("Failed to decode response PDU: {err}");
+                    error!("Failed to decode response PDU: {}", err);
                 })
         })
         .map_err(|_| {

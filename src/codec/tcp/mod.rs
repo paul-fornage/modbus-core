@@ -2,6 +2,7 @@
 
 use super::*;
 use byteorder::{BigEndian, ByteOrder};
+use crate::{warn, error};
 
 pub mod client;
 pub mod server;
@@ -77,13 +78,21 @@ pub fn decode(
                 Response => "response",
             };
             if drop_cnt + 1 >= MAX_FRAME_LEN {
-                log::error!(
-                    "Giving up to decode frame after dropping {drop_cnt} byte(s): {:X?}",
+                #[cfg(feature = "log")]
+                error!(
+                    "Giving up to decode frame after dropping {} byte(s): {:X?}",
+                    drop_cnt,
+                    &buf[0..drop_cnt]
+                );
+                #[cfg(feature = "defmt")]
+                error!(
+                    "Giving up to decode frame after dropping {} byte(s): {=[u8]:#x}",
+                    drop_cnt,
                     &buf[0..drop_cnt]
                 );
                 return Err(err);
             }
-            log::warn!("Failed to decode {pdu_type} frame: {err}");
+            warn!("Failed to decode {} frame: {}", pdu_type, err);
             drop_cnt += 1;
             retry = true;
             Ok(None)

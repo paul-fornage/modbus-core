@@ -16,6 +16,12 @@
 #![allow(clippy::similar_names)] // TODO
 #![allow(clippy::wildcard_imports)]
 
+
+#[cfg(all(feature = "defmt", target_os = "none"))]
+pub(crate) use defmt::{error, warn};
+#[cfg(feature = "log")]
+pub(crate) use log::{error, warn};
+
 mod codec;
 mod error;
 mod frame;

@@ -1,5 +1,6 @@
 //! Modbus TCP client (master) specific functions.
 use super::*;
+use crate::error;
 
 /// Encode an TCP request.
 pub fn encode_request(adu: RequestAdu, buf: &mut [u8]) -> Result<usize> {
@@ -50,7 +51,7 @@ pub fn decode_response(buf: &[u8]) -> Result<Option<ResponseAdu>> {
                 .map(|pdu| Some(ResponseAdu { hdr, pdu }))
                 .inspect_err(|&err| {
                     // Unrecoverable error
-                    log::error!("Failed to decode Response PDU: {err}");
+                    error!("Failed to decode Response PDU: {}", err);
                 })
         })
         .map_err(|_| {
